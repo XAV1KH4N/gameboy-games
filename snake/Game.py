@@ -1,30 +1,34 @@
 from Window import Window
+from SnakeGame import SnakeGame
 import pygame
-import random
-
 
 class Game:
     def __init__(self):
-        pass
+        self.clock = pygame.time.Clock()
+        self.TICK_SPEED = 100
 
     def run(self):
-        # Main loop
-        # Create Window
-        window = Window()
-        
+        snake = SnakeGame()
         running = True
         
         while running:
+            acted = False
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                acted = snake.react(event)
             
-            window.repaint()
-            window.clock.tick(1000000)
+            if (not acted):
+                snake.snake.tick()
+                
+            snake.repaint()
+            pygame.display.update()
+            pygame.time.delay(self.TICK_SPEED)   
             
-        window.quit()
+        snake.quit()
         print("Quiting")
-
+        
 def main():
     game = Game()
     game.run()

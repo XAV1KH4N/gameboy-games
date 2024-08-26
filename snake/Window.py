@@ -15,15 +15,11 @@ class Window:
         self.grid = np.array((self.rows, self.height))
         
         self.hasGrid = True
-        self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width, self.height))
 
     def repaint(self):
         self.screen.fill("purple")
         self.paintGridLines()
-        #pygame.draw.line(self.screen, "black", (0,0), (400, 400))
-        self.colourRandom()
-        pygame.display.flip()
         
     def quit(self):
         pygame.quit
@@ -37,10 +33,12 @@ class Window:
     def colourRandom(self):
         i = random.Random().randint(0, self.columns)
         j = random.Random().randint(0, self.rows)
+        self.paintCoord(i, j)
+    
+    def paintCoord(self, i, j):
         w = self.widthGap()
         h = self.heightGap()
         pygame.draw.rect(self.screen, "black", (i * w, j * h, w, h))
-        
         
     def paintGridLines(self):
         for c in range(self.columns):
