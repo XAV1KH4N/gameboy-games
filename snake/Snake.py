@@ -23,9 +23,6 @@ class Snake:
         tail2 = Body(1,5, tail1)
         tail3 = Body(1,6, tail2)
         return tail3
-    
-    def tick(self, feed = False):
-        self.move(self.direction, feed)
         
     def isCoordsTaken(self, x, y):
         body = self.tail
@@ -50,10 +47,10 @@ class Snake:
         newHead = Body(x,y)
         head.setHead(newHead)
         
-        if not feed:
-            self.tail = self.tail.head
-            
+        if not feed: self.tail = self.tail.head
+        print(f"set dir {direction}")
         self.direction = direction
+        return x, y
     
     def head(self):
         body = self.tail

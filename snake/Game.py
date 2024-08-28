@@ -1,38 +1,34 @@
 from Window import Window
 from SnakeGame import SnakeGame
+from GameCode import GameCode
 import pygame
 
 class Game:
+    nullCoords = (-1, -1)
+    
     def __init__(self):
+        self.buffer = []
         self.clock = pygame.time.Clock()
         self.TICK_SPEED = 125
 
+    def getEventsAndClear(self):
+        events = pygame.event.get().copy()
+        pygame.event.clear()
+        return events
+
     def run(self):
-        snake = SnakeGame()
-        running = True
+        game = SnakeGame()
+        status = GameCode.RUN
         
-        while running:
-            acted = False
+        while status == GameCode.RUN:
+            events = self.getEventsAndClear()            
+            status = game.handleInputs(events)
             
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                acted = snake.react(event)
-                if acted:
-                    break # add the rest to a buffer for the next "tick", events should probably expire
-            
-            if (not acted and snake.canSnakeMove(snake.snake.direction)):
-                x, y = snake.snake.nextMove(snake.snake.direction)
-                snake.snake.tick(snake.consumeApple(x, y))
-                
-            elif (not acted and not snake.canSnakeMove(snake.snake.direction)):
-                running = False
-                
-            snake.repaint()
+            game.repaint()
             pygame.display.update()
             pygame.time.delay(self.TICK_SPEED)   
             
-        snake.quit()
+        game.quit()
         print("Quiting")
         
 def main():
