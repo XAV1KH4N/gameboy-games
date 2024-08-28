@@ -19,10 +19,13 @@ class Snake:
         head = Body(1,1)
         body = Body(1,2, head)
         tail = Body(1,3, body)
-        return tail
+        tail1 = Body(1,4, tail)
+        tail2 = Body(1,5, tail1)
+        tail3 = Body(1,6, tail2)
+        return tail3
     
-    def tick(self):
-        self.move(self.direction)
+    def tick(self, feed = False):
+        self.move(self.direction, feed)
         
     def isCoordsTaken(self, x, y):
         body = self.tail
@@ -40,14 +43,16 @@ class Snake:
         head = self.head()
         return f(head.x, head.y)
     
-    def move(self, direction):
+    def move(self, direction, feed):
         head = self.head()
         x, y = self.nextMove(direction)
         
         newHead = Body(x,y)
         head.setHead(newHead)
         
-        self.tail = self.tail.head
+        if not feed:
+            self.tail = self.tail.head
+            
         self.direction = direction
     
     def head(self):
@@ -71,6 +76,22 @@ class Body:
         
     def setHead(self, head):
         self.head = head
+        
+    def size(self):
+        size = 1
+        body = self
+        while body != None:
+            body = body.head
+            size += 1
+        return size
+    
+class Apple:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def isCoordsMatch(self, x, y):
+        return x == self.x and y == self.y
     
 class Direction(Enum):
     NORTH = 0
