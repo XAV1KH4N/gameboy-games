@@ -2,7 +2,6 @@ from enum import Enum
 
 class Snake:
     def __init__(self):
-        self.alive = True        
         self.tail = self.createTail()
         self.direction = Direction.EAST
         self.nextCoord = self.createMap()
@@ -48,7 +47,6 @@ class Snake:
         head.setHead(newHead)
         
         if not feed: self.tail = self.tail.head
-        print(f"set dir {direction}")
         self.direction = direction
         return x, y
     
@@ -59,11 +57,7 @@ class Snake:
                 return body
             body = body.head
             
-        return self.tail
-            
-    
-    def feed(self):
-        self.length += 1
+        return self.tail    
         
 class Body:
     def __init__(self, x: int, y: int, head = None):

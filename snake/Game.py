@@ -1,15 +1,15 @@
 from Window import Window
 from SnakeGame import SnakeGame
+from SnakeHomePage import SnakeHomePage, HomePageStatus
 from GameCode import GameCode
 import pygame
 
-class Game:
-    nullCoords = (-1, -1)
-    
+class Game:    
     def __init__(self):
         self.buffer = []
         self.clock = pygame.time.Clock()
         self.TICK_SPEED = 125
+        self.window = Window()
 
     def getEventsAndClear(self):
         events = pygame.event.get().copy()
@@ -17,9 +17,9 @@ class Game:
         return events
 
     def run(self):
-        game = SnakeGame()
+        game = SnakeGame(self.window)
         status = GameCode.RUN
-        
+    
         while status == GameCode.RUN:
             events = self.getEventsAndClear()            
             status = game.handleInputs(events)
@@ -27,12 +27,23 @@ class Game:
             game.repaint()
             pygame.display.update()
             pygame.time.delay(self.TICK_SPEED)   
-            
-        game.quit()
-        print("Quiting")
         
+    def mainLoop(self):
+        page = SnakeHomePage(self.window)
+        action = page.run()
+        if (action == HomePageStatus.GAME):
+            self.run()
+        # Main Page - > Returns which page
+        #Main Page
+        # - HighScore
+        # - Settings
+        # - Play
+        # - Quit
+        self.window.quit()
+        print("Quiting")
+    
 def main():
     game = Game()
-    game.run()
+    game.mainLoop()
 
 main()

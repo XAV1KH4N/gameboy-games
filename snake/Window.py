@@ -22,7 +22,7 @@ class Window:
 
     def repaint(self):
         self.screen.fill("green")
-        self.paintGridLines()
+        #self.paintGridLines()
         
     def quit(self):
         pygame.quit
