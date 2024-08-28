@@ -5,7 +5,7 @@ import pygame
 class Game:
     def __init__(self):
         self.clock = pygame.time.Clock()
-        self.TICK_SPEED = 100
+        self.TICK_SPEED = 250
 
     def run(self):
         snake = SnakeGame()
@@ -18,8 +18,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
                 acted = snake.react(event)
+                if acted:
+                    break # add the rest to a buffer for the next "tick", events should probably expire
             
-            if (not acted):
+            if (not acted and snake.canSnakeMove(snake.snake.direction)):
                 snake.snake.tick()
                 
             snake.repaint()

@@ -17,8 +17,11 @@ class Window:
         self.hasGrid = True
         self.screen = pygame.display.set_mode((self.width, self.height))
 
+    def isCoordWithin(self, x, y):
+        return x >= 0 and x < self.columns and y >= 0 and y < self.rows
+
     def repaint(self):
-        self.screen.fill("purple")
+        self.screen.fill("green")
         self.paintGridLines()
         
     def quit(self):
@@ -35,10 +38,10 @@ class Window:
         j = random.Random().randint(0, self.rows)
         self.paintCoord(i, j)
     
-    def paintCoord(self, i, j):
+    def paintCoord(self, i, j, colour = "black"):
         w = self.widthGap()
         h = self.heightGap()
-        pygame.draw.rect(self.screen, "black", (i * w, j * h, w, h))
+        pygame.draw.rect(self.screen, colour, (i * w, j * h, w, h))
         
     def paintGridLines(self):
         for c in range(self.columns):

@@ -4,42 +4,50 @@ class Snake:
     def __init__(self):
         self.alive = True        
         self.tail = self.createTail()
-        self.direction = Direction.NORTH
-        
+        self.direction = Direction.EAST
+        self.nextCoord = self.createMap()
+    
+    def createMap(self):
+        return {
+            Direction.NORTH: lambda x, y : (x, y - 1),
+            Direction.EAST: lambda x,y : (x + 1, y), 
+            Direction.SOUTH: lambda x,y : (x, y + 1), 
+            Direction.WEST: lambda x,y : (x - 1, y)
+        }
+    
     def createTail(self):
         head = Body(1,1)
-        b1 = Body(1,2, head)
-        tail = Body(1,3, b1)
+        body = Body(1,2, head)
+        tail = Body(1,3, body)
         return tail
     
     def tick(self):
         self.move(self.direction)
+        
+    def isCoordsTaken(self, x, y):
+        body = self.tail
+        while body != None:
+            if (self.isBodyTaken(body, x, y)):
+                return True
+            body = body.head
+        return False
+    
+    def isBodyTaken(self, body, x, y):
+        return body.x == x and body.y == y 
+        
+    def nextMove(self, direction):
+        f = self.nextCoord[direction]
+        head = self.head()
+        return f(head.x, head.y)
     
     def move(self, direction):
-        if (direction == Direction.EAST):
-            head = self.head()
-            newHead = Body(head.x + 1, head.y)
-            head.setHead(newHead)
-            self.tail = self.tail.head
-
-        if (direction == Direction.WEST):
-            head = self.head()
-            newHead = Body(head.x - 1, head.y)
-            head.setHead(newHead)
-            self.tail = self.tail.head
+        head = self.head()
+        x, y = self.nextMove(direction)
         
-        if (direction == Direction.NORTH):
-            head = self.head()
-            newHead = Body(head.x, head.y - 1)
-            head.setHead(newHead)
-            self.tail = self.tail.head
-
-        if (direction == Direction.SOUTH):
-            head = self.head()
-            newHead = Body(head.x, head.y + 1)
-            head.setHead(newHead)
-            self.tail = self.tail.head
-            
+        newHead = Body(x,y)
+        head.setHead(newHead)
+        
+        self.tail = self.tail.head
         self.direction = direction
     
     def head(self):
